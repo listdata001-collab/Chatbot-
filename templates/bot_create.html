@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Create Bot') }} - BotFactory{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>{{ _('Create New Bot') }}
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" id="createBotForm">
+                        <!-- Basic Information -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">{{ _('Basic Information') }}</h5>
+                            
+                            <div class="mb-3">
+                                <label for="name" class="form-label">{{ _('Bot Name') }} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="{{ _('Enter a name for your bot') }}">
+                                <div class="form-text">{{ _('Choose a memorable name for your bot') }}</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">{{ _('Description') }}</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"
+                                          placeholder="{{ _('Describe what your bot does') }}"></textarea>
+                                <div class="form-text">{{ _('Optional: Describe your bot\'s purpose and functionality') }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Platform Selection -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">{{ _('Platform') }}</h5>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="card platform-card h-100" data-platform="telegram">
+                                        <div class="card-body text-center">
+                                            <input type="radio" class="form-check-input d-none" id="telegram" name="platform" value="telegram" required>
+                                            <label for="telegram" class="w-100 h-100 d-flex flex-column justify-content-center">
+                                                <i class="fab fa-telegram fa-3x text-primary mb-2"></i>
+                                                <h6 class="fw-bold">Telegram</h6>
+                                                <span class="badge bg-success">{{ _('Available') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card platform-card h-100 disabled" data-platform="instagram">
+                                        <div class="card-body text-center">
+                                            <input type="radio" class="form-check-input d-none" id="instagram" name="platform" value="instagram" disabled>
+                                            <label for="instagram" class="w-100 h-100 d-flex flex-column justify-content-center">
+                                                <i class="fab fa-instagram fa-3x text-muted mb-2"></i>
+                                                <h6 class="fw-bold text-muted">Instagram</h6>
+                                                <span class="badge bg-warning">{{ _('Coming Soon') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card platform-card h-100 disabled" data-platform="whatsapp">
+                                        <div class="card-body text-center">
+                                            <input type="radio" class="form-check-input d-none" id="whatsapp" name="platform" value="whatsapp" disabled>
+                                            <label for="whatsapp" class="w-100 h-100 d-flex flex-column justify-content-center">
+                                                <i class="fab fa-whatsapp fa-3x text-muted mb-2"></i>
+                                                <h6 class="fw-bold text-muted">WhatsApp</h6>
+                                                <span class="badge bg-warning">{{ _('Coming Soon') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Platform Configuration -->
+                        <div id="platformConfig" class="mb-4" style="display: none;">
+                            <h5 class="text-primary mb-3">{{ _('Platform Configuration') }}</h5>
+                            
+                            <!-- Telegram Configuration -->
+                            <div id="telegramConfig" class="platform-config" style="display: none;">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    {{ _('To create a Telegram bot, you need to get a bot token from @BotFather on Telegram.') }}
+                                    <a href="https://core.telegram.org/bots#6-botfather" target="_blank" class="alert-link">
+                                        {{ _('Learn how') }} <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="telegram_token" class="form-label">{{ _('Bot Token') }} <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="telegram_token" name="telegram_token"
+                                           placeholder="1234567890:ABCdefGHIjklMNOpqrSTUvwxyz">
+                                    <div class="form-text">{{ _('Enter your Telegram bot token from @BotFather') }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Configuration -->
+                        <div class="mb-4">
+                            <h5 class="text-primary mb-3">{{ _('AI Personality') }}</h5>
+                            
+                            <div class="mb-3">
+                                <label for="ai_personality" class="form-label">{{ _('Bot Personality') }}</label>
+                                <textarea class="form-control" id="ai_personality" name="ai_personality" rows="4"
+                                          placeholder="{{ _('Describe how your bot should behave and respond') }}">{{ _('You are a helpful assistant. Be friendly, professional, and informative in your responses.') }}</textarea>
+                                <div class="form-text">{{ _('Define your bot\'s personality and behavior. This will guide how the AI responds to users.') }}</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">{{ _('Personality Presets') }}</label>
+                                    <div class="list-group">
+                                        <button type="button" class="list-group-item list-group-item-action personality-preset" 
+                                                data-personality="{{ _('You are a helpful customer support assistant. Be professional, empathetic, and solution-oriented.') }}">
+                                            <i class="fas fa-headset me-2"></i>{{ _('Customer Support') }}
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action personality-preset"
+                                                data-personality="{{ _('You are a friendly sales assistant. Be enthusiastic, knowledgeable about products, and help customers make purchasing decisions.') }}">
+                                            <i class="fas fa-shopping-cart me-2"></i>{{ _('Sales Assistant') }}
+                                        </button>
+                                        <button type="button" class="list-group-item list-group-item-action personality-preset"
+                                                data-personality="{{ _('You are an educational tutor. Be patient, encouraging, and explain concepts clearly with examples.') }}">
+                                            <i class="fas fa-graduation-cap me-2"></i>{{ _('Educational Tutor') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>{{ _('Cancel') }}
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-robot me-2"></i>{{ _('Create Bot') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const platformCards = document.querySelectorAll('.platform-card:not(.disabled)');
+    const platformConfig = document.getElementById('platformConfig');
+    const telegramConfig = document.getElementById('telegramConfig');
+    const personalityPresets = document.querySelectorAll('.personality-preset');
+    const personalityTextarea = document.getElementById('ai_personality');
+    
+    // Platform selection
+    platformCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const platform = this.dataset.platform;
+            const radio = this.querySelector('input[type="radio"]');
+            
+            // Clear previous selections
+            platformCards.forEach(c => c.classList.remove('selected'));
+            
+            // Select current platform
+            this.classList.add('selected');
+            radio.checked = true;
+            
+            // Show platform configuration
+            showPlatformConfig(platform);
+        });
+    });
+    
+    function showPlatformConfig(platform) {
+        // Hide all configs
+        document.querySelectorAll('.platform-config').forEach(config => {
+            config.style.display = 'none';
+        });
+        
+        // Show relevant config
+        if (platform === 'telegram') {
+            platformConfig.style.display = 'block';
+            telegramConfig.style.display = 'block';
+            document.getElementById('telegram_token').required = true;
+        }
+    }
+    
+    // Personality presets
+    personalityPresets.forEach(preset => {
+        preset.addEventListener('click', function() {
+            const personality = this.dataset.personality;
+            personalityTextarea.value = personality;
+            
+            // Visual feedback
+            personalityPresets.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // Form validation
+    const form = document.getElementById('createBotForm');
+    form.addEventListener('submit', function(event) {
+        const selectedPlatform = document.querySelector('input[name="platform"]:checked');
+        
+        if (!selectedPlatform) {
+            event.preventDefault();
+            alert('{{ _("Please select a platform for your bot") }}');
+            return;
+        }
+        
+        if (selectedPlatform.value === 'telegram') {
+            const token = document.getElementById('telegram_token').value;
+            if (!token || !token.match(/^\d+:[A-Za-z0-9_-]+$/)) {
+                event.preventDefault();
+                alert('{{ _("Please provide a valid Telegram bot token") }}');
+                return;
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.platform-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.platform-card:not(.disabled):hover {
+    border-color: var(--bs-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.platform-card.selected {
+    border-color: var(--bs-primary);
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.platform-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.personality-preset {
+    cursor: pointer;
+}
+
+.personality-preset:hover {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+.personality-preset.active {
+    background-color: var(--bs-primary);
+    color: white;
+}
+</style>
+{% endblock %}

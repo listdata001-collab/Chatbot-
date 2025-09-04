@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Register') }} - BotFactory{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center py-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                        <h3 class="fw-bold">{{ _('Create Account') }}</h3>
+                        <p class="text-muted">{{ _('Join BotFactory and start building AI chatbots') }}</p>
+                    </div>
+
+                    <form method="POST" id="registerForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">{{ _('Username') }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       required minlength="3" pattern="[a-zA-Z0-9_]+" 
+                                       title="{{ _('Username must contain only letters, numbers, and underscores') }}">
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ _('Please provide a valid username') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">{{ _('Email Address') }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ _('Please provide a valid email address') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ _('Password') }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       required minlength="6">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ _('Password must be at least 6 characters long') }}
+                            </div>
+                            <div class="form-text">
+                                <small id="passwordStrength" class="text-muted"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">{{ _('Confirm Password') }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                {{ _('Passwords do not match') }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                {{ _('I agree to the Terms of Service and Privacy Policy') }}
+                            </label>
+                            <div class="invalid-feedback">
+                                {{ _('You must agree to the terms and conditions') }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>{{ _('Create Account') }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted">
+                            {{ _('Already have an account?') }}
+                            <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                                {{ _('Sign in here') }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordStrength = document.getElementById('passwordStrength');
+    
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+    
+    // Password strength indicator
+    password.addEventListener('input', function() {
+        const value = this.value;
+        let strength = 0;
+        let strengthText = '';
+        
+        if (value.length >= 6) strength++;
+        if (value.match(/[a-z]/)) strength++;
+        if (value.match(/[A-Z]/)) strength++;
+        if (value.match(/[0-9]/)) strength++;
+        if (value.match(/[^a-zA-Z0-9]/)) strength++;
+        
+        switch (strength) {
+            case 0:
+            case 1:
+                strengthText = '{{ _("Weak") }}';
+                passwordStrength.className = 'text-danger';
+                break;
+            case 2:
+            case 3:
+                strengthText = '{{ _("Medium") }}';
+                passwordStrength.className = 'text-warning';
+                break;
+            case 4:
+            case 5:
+                strengthText = '{{ _("Strong") }}';
+                passwordStrength.className = 'text-success';
+                break;
+        }
+        
+        passwordStrength.textContent = value.length > 0 ? `{{ _("Password strength") }}: ${strengthText}` : '';
+    });
+    
+    // Confirm password validation
+    function validatePasswords() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity('{{ _("Passwords do not match") }}');
+            confirmPassword.classList.add('is-invalid');
+        } else {
+            confirmPassword.setCustomValidity('');
+            confirmPassword.classList.remove('is-invalid');
+        }
+    }
+    
+    password.addEventListener('input', validatePasswords);
+    confirmPassword.addEventListener('input', validatePasswords);
+    
+    // Form validation
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // Focus on username field
+    document.getElementById('username').focus();
+});
+</script>
+{% endblock %}

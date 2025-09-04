@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Manage Bot') }}: {{ bot.name }} - BotFactory{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Bot Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h2 class="fw-bold mb-1">{{ bot.name }}</h2>
+                            <p class="text-muted mb-2">{{ bot.description or _('No description provided') }}</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="badge bg-secondary">
+                                    <i class="fab fa-{{ bot.platform.value }} me-1"></i>
+                                    {{ bot.platform.value.title() }}
+                                </span>
+                                {% if bot.status.value == 'active' %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-circle me-1"></i>{{ _('Active') }}
+                                    </span>
+                                {% elif bot.status.value == 'inactive' %}
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-circle me-1"></i>{{ _('Inactive') }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-circle me-1"></i>{{ _('Pending') }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('bot.toggle_status', bot_id=bot.id) }}" 
+                               class="btn btn-{{ 'warning' if bot.status.value == 'active' else 'success' }}">
+                                <i class="fas fa-{{ 'stop' if bot.status.value == 'active' else 'play' }} me-1"></i>
+                                {{ _('Stop') if bot.status.value == 'active' else _('Start') }}
+                            </a>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editBotModal">
+                                <i class="fas fa-edit me-1"></i>{{ _('Edit') }}
+                            </button>
+                            <a href="{{ url_for('bot.delete', bot_id=bot.id) }}" 
+                               class="btn btn-danger"
+                               onclick="return confirm('{{ _('Are you sure you want to delete this bot?') }}')">
+                                <i class="fas fa-trash me-1"></i>{{ _('Delete') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary text-white p-3 rounded">
+                                <i class="fas fa-comments fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Total Conversations') }}</div>
+                            <div class="h4 fw-bold mb-0">{{ total_conversations }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success text-white p-3 rounded">
+                                <i class="fas fa-envelope fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Total Messages') }}</div>
+                            <div class="h4 fw-bold mb-0">{{ total_messages }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info text-white p-3 rounded">
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Avg Response Time') }}</div>
+                            <div class="h4 fw-bold mb-0">
+                                {% if analytics %}
+                                    {{ "%.2f"|format(analytics[0].avg_response_time) }}s
+                                {% else %}
+                                    0.00s
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning text-white p-3 rounded">
+                                <i class="fas fa-calendar-day fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Created') }}</div>
+                            <div class="h6 fw-bold mb-0">{{ bot.created_at.strftime('%Y-%m-%d') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Analytics Chart -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">{{ _('Message Analytics (Last 7 Days)') }}</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="analyticsChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bot Configuration -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">{{ _('Configuration') }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{{ _('Platform') }}</label>
+                        <div>
+                            <span class="badge bg-secondary">
+                                <i class="fab fa-{{ bot.platform.value }} me-1"></i>
+                                {{ bot.platform.value.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    {% if bot.platform.value == 'telegram' and bot.telegram_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{{ _('Bot Token') }}</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" value="{{ bot.telegram_token }}" readonly id="botToken">
+                            <button class="btn btn-outline-secondary" type="button" onclick="toggleTokenVisibility()">
+                                <i class="fas fa-eye" id="tokenToggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{{ _('AI Personality') }}</label>
+                        <textarea class="form-control" rows="4" readonly>{{ bot.ai_personality }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Conversations -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">{{ _('Recent Conversations') }}</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_conversations %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{{ _('User ID') }}</th>
+                                        <th>{{ _('Messages') }}</th>
+                                        <th>{{ _('Started') }}</th>
+                                        <th>{{ _('Last Message') }}</th>
+                                        <th>{{ _('Actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for conversation in recent_conversations %}
+                                    <tr>
+                                        <td>
+                                            <code>{{ conversation.user_platform_id }}</code>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ conversation.message_count }}</span>
+                                        </td>
+                                        <td>
+                                            <small>{{ conversation.started_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        </td>
+                                        <td>
+                                            <small>{{ conversation.last_message_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" 
+                                                    onclick="viewConversation({{ conversation.id }})">
+                                                <i class="fas fa-eye"></i> {{ _('View') }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">{{ _('No conversations yet') }}</h6>
+                            <p class="text-muted">{{ _('Conversations will appear here when users start chatting with your bot') }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Bot Modal -->
+<div class="modal fade" id="editBotModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ _('Edit Bot') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editBotForm">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">{{ _('Bot Name') }}</label>
+                        <input type="text" class="form-control" id="editName" value="{{ bot.name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">{{ _('Description') }}</label>
+                        <textarea class="form-control" id="editDescription" rows="3">{{ bot.description or '' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPersonality" class="form-label">{{ _('AI Personality') }}</label>
+                        <textarea class="form-control" id="editPersonality" rows="4">{{ bot.ai_personality }}</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="button" class="btn btn-primary" onclick="saveBotChanges()">{{ _('Save Changes') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Analytics Chart
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('analyticsChart').getContext('2d');
+    
+    // Prepare data
+    const labels = [];
+    const messageData = [];
+    const userData = [];
+    
+    {% for item in analytics %}
+        labels.unshift('{{ item.date.strftime("%m/%d") }}');
+        messageData.unshift({{ item.total_messages }});
+        userData.unshift({{ item.unique_users }});
+    {% endfor %}
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '{{ _("Messages") }}',
+                data: messageData,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                tension: 0.1
+            }, {
+                label: '{{ _("Unique Users") }}',
+                data: userData,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+
+// Token visibility toggle
+function toggleTokenVisibility() {
+    const tokenInput = document.getElementById('botToken');
+    const toggleIcon = document.getElementById('tokenToggleIcon');
+    
+    if (tokenInput.type === 'password') {
+        tokenInput.type = 'text';
+        toggleIcon.className = 'fas fa-eye-slash';
+    } else {
+        tokenInput.type = 'password';
+        toggleIcon.className = 'fas fa-eye';
+    }
+}
+
+// View conversation (placeholder)
+function viewConversation(conversationId) {
+    alert('{{ _("Conversation view feature coming soon!") }}');
+}
+
+// Save bot changes (placeholder)
+function saveBotChanges() {
+    alert('{{ _("Edit functionality coming soon!") }}');
+    bootstrap.Modal.getInstance(document.getElementById('editBotModal')).hide();
+}
+</script>
+{% endblock %}

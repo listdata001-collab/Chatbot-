@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('BotFactory - AI Chatbot Platform') }}{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    {{ _('Create AI Chatbots in Minutes') }}
+                </h1>
+                <p class="lead mb-4">
+                    {{ _('Build intelligent chatbots for Telegram, Instagram, and WhatsApp using Google Gemini AI. No coding required.') }}
+                </p>
+                <div class="d-grid gap-2 d-md-flex">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-4 me-md-2">
+                        <i class="fas fa-rocket me-2"></i>{{ _('Get Started Free') }}
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg px-4">
+                        {{ _('Sign In') }}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-robot display-1 text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <div class="row text-center mb-5">
+        <div class="col">
+            <h2 class="display-5 fw-bold">{{ _('Why Choose BotFactory?') }}</h2>
+            <p class="lead text-muted">{{ _('Everything you need to create and manage AI chatbots') }}</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-brain fa-3x"></i>
+                    </div>
+                    <h5 class="card-title">{{ _('AI-Powered') }}</h5>
+                    <p class="card-text text-muted">
+                        {{ _('Powered by Google Gemini AI for intelligent and natural conversations') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-comments fa-3x"></i>
+                    </div>
+                    <h5 class="card-title">{{ _('Multi-Platform') }}</h5>
+                    <p class="card-text text-muted">
+                        {{ _('Deploy on Telegram, Instagram, and WhatsApp from a single dashboard') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-chart-line fa-3x"></i>
+                    </div>
+                    <h5 class="card-title">{{ _('Analytics') }}</h5>
+                    <p class="card-text text-muted">
+                        {{ _('Real-time analytics and insights to optimize your bot performance') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Platforms Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col">
+                <h2 class="display-6 fw-bold">{{ _('Supported Platforms') }}</h2>
+                <p class="text-muted">{{ _('Deploy your bots across popular messaging platforms') }}</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-3 col-6 text-center mb-4">
+                <div class="platform-icon mb-3">
+                    <i class="fab fa-telegram fa-4x text-primary"></i>
+                </div>
+                <h5>Telegram</h5>
+                <span class="badge bg-success">{{ _('Available') }}</span>
+            </div>
+            
+            <div class="col-md-3 col-6 text-center mb-4">
+                <div class="platform-icon mb-3">
+                    <i class="fab fa-instagram fa-4x text-danger"></i>
+                </div>
+                <h5>Instagram</h5>
+                <span class="badge bg-warning">{{ _('Coming Soon') }}</span>
+            </div>
+            
+            <div class="col-md-3 col-6 text-center mb-4">
+                <div class="platform-icon mb-3">
+                    <i class="fab fa-whatsapp fa-4x text-success"></i>
+                </div>
+                <h5>WhatsApp</h5>
+                <span class="badge bg-warning">{{ _('Coming Soon') }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pricing Section -->
+<div class="container my-5">
+    <div class="row text-center mb-5">
+        <div class="col">
+            <h2 class="display-6 fw-bold">{{ _('Simple Pricing') }}</h2>
+            <p class="text-muted">{{ _('Choose the plan that fits your needs') }}</p>
+        </div>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5 class="card-title mb-0">{{ _('Free') }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-6 fw-bold mb-3">$0<small class="text-muted fs-6">/{{ _('month') }}</small></div>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>1 {{ _('Bot') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>100 {{ _('Messages/month') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Basic Analytics') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-success position-relative">
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-success">{{ _('Popular') }}</span>
+                </div>
+                <div class="card-header bg-success text-white text-center">
+                    <h5 class="card-title mb-0">{{ _('Starter') }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-6 fw-bold mb-3">$9<small class="text-muted fs-6">/{{ _('month') }}</small></div>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>3 {{ _('Bots') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>1,000 {{ _('Messages/month') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Advanced Analytics') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h5 class="card-title mb-0">{{ _('Basic') }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-6 fw-bold mb-3">$29<small class="text-muted fs-6">/{{ _('month') }}</small></div>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>10 {{ _('Bots') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>5,000 {{ _('Messages/month') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Premium Support') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-dark">
+                <div class="card-header bg-dark text-white text-center">
+                    <h5 class="card-title mb-0">{{ _('Premium') }}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-6 fw-bold mb-3">$99<small class="text-muted fs-6">/{{ _('month') }}</small></div>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Unlimited Bots') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Unlimited Messages') }}</li>
+                        <li><i class="fas fa-check text-success me-2"></i>{{ _('Priority Support') }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-6 fw-bold mb-3">{{ _('Ready to Get Started?') }}</h2>
+        <p class="lead mb-4">{{ _('Join thousands of businesses using BotFactory to automate customer support') }}</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5">
+            {{ _('Start Your Free Trial') }} <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}

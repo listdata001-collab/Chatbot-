@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Dashboard') }} - BotFactory{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 fw-bold">{{ _('Dashboard') }}</h1>
+                <a href="{{ url_for('bot.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>{{ _('Create New Bot') }}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary text-white p-3 rounded">
+                                <i class="fas fa-robot fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Total Bots') }}</div>
+                            <div class="h4 fw-bold mb-0">{{ bots|length }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success text-white p-3 rounded">
+                                <i class="fas fa-play fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Active Bots') }}</div>
+                            <div class="h4 fw-bold mb-0">{{ bots|selectattr('status.value', 'equalto', 'active')|list|length }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info text-white p-3 rounded">
+                                <i class="fas fa-comments fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Messages Today') }}</div>
+                            <div class="h4 fw-bold mb-0">
+                                {% set today_messages = 0 %}
+                                {% for item in analytics %}
+                                    {% if item.analytics %}
+                                        {% set today_messages = today_messages + item.analytics[0].total_messages %}
+                                    {% endif %}
+                                {% endfor %}
+                                {{ today_messages }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning text-white p-3 rounded">
+                                <i class="fas fa-crown fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="text-muted small">{{ _('Subscription') }}</div>
+                            <div class="h6 fw-bold mb-0">
+                                {% if current_user.subscription %}
+                                    {{ current_user.subscription.subscription_type.value.title() }}
+                                {% else %}
+                                    {{ _('Free') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Limits -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ _('Subscription Limits') }}</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">{{ _('Bots Used') }}</label>
+                                <div class="progress">
+                                    {% set bot_percentage = (bots|length / limits.max_bots * 100) if limits.max_bots != -1 else 0 %}
+                                    <div class="progress-bar" style="width: {{ bot_percentage }}%"></div>
+                                </div>
+                                <small class="text-muted">
+                                    {{ bots|length }} / {{ limits.max_bots if limits.max_bots != -1 else _('Unlimited') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">{{ _('Monthly Messages') }}</label>
+                                <div class="progress">
+                                    {% set message_percentage = 50 %}  <!-- This would need real calculation -->
+                                    <div class="progress-bar" style="width: {{ message_percentage }}%"></div>
+                                </div>
+                                <small class="text-muted">
+                                    500 / {{ limits.max_messages_per_month if limits.max_messages_per_month != -1 else _('Unlimited') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bots List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom">
+                    <h5 class="card-title mb-0">{{ _('Your Bots') }}</h5>
+                </div>
+                <div class="card-body">
+                    {% if bots %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{{ _('Name') }}</th>
+                                        <th>{{ _('Platform') }}</th>
+                                        <th>{{ _('Status') }}</th>
+                                        <th>{{ _('Created') }}</th>
+                                        <th>{{ _('Last Active') }}</th>
+                                        <th>{{ _('Actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bot in bots %}
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <strong>{{ bot.name }}</strong>
+                                                {% if bot.description %}
+                                                    <br><small class="text-muted">{{ bot.description[:50] }}...</small>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                <i class="fab fa-{{ bot.platform.value }} me-1"></i>
+                                                {{ bot.platform.value.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if bot.status.value == 'active' %}
+                                                <span class="badge bg-success">{{ _('Active') }}</span>
+                                            {% elif bot.status.value == 'inactive' %}
+                                                <span class="badge bg-danger">{{ _('Inactive') }}</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">{{ _('Pending') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <small>{{ bot.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                {% if bot.last_active %}
+                                                    {{ bot.last_active.strftime('%Y-%m-%d %H:%M') }}
+                                                {% else %}
+                                                    {{ _('Never') }}
+                                                {% endif %}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ url_for('bot.manage', bot_id=bot.id) }}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-cog"></i>
+                                                </a>
+                                                <a href="{{ url_for('bot.toggle_status', bot_id=bot.id) }}" class="btn btn-outline-warning">
+                                                    <i class="fas fa-{{ 'stop' if bot.status.value == 'active' else 'play' }}"></i>
+                                                </a>
+                                                <a href="{{ url_for('bot.delete', bot_id=bot.id) }}" class="btn btn-outline-danger" 
+                                                   onclick="return confirm('{{ _('Are you sure you want to delete this bot?') }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-robot fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">{{ _('No bots created yet') }}</h5>
+                            <p class="text-muted">{{ _('Create your first AI chatbot to get started') }}</p>
+                            <a href="{{ url_for('bot.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>{{ _('Create Your First Bot') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Dashboard charts and animations would go here
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate progress bars
+    const progressBars = document.querySelectorAll('.progress-bar');
+    progressBars.forEach(bar => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = width;
+        }, 500);
+    });
+});
+</script>
+{% endblock %}
