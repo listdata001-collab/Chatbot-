@@ -1,0 +1,542 @@
+BotFactory Loyihasini Replit'da Amalga Oshirish Strukturasi
+Ushbu qo'llanma sizning rejangiz asosida loyihani Replit'da noldan boshlab, production'ga tayyor holatga keltirishgacha bo'lgan jarayonni qamrab oladi.
+
+1-Qadam: Replit Loyihasini Sozlash ⚙️
+Yangi Repl Yaratish:
+
+Replit.com saytiga kiring va "+ Create Repl" tugmasini bosing.
+
+Shablon (template) sifatida "Python" ni tanlang.
+
+Loyiha nomini "BotFactory" deb nomlang va "Create Repl" tugmasini bosing.
+
+.replit Faylini Konfiguratsiya Qilish:
+
+Chapdagi fayllar panelida, uch nuqtani bosib, "Show hidden files" ni tanlang.
+
+.replit faylini oching va uning tarkibini quyidagicha o'zgartiring. Bu fayl "Run" tugmasi bosilganda qaysi buyruq ishga tushishini belgilaydi.
+
+Ini, TOML
+
+# .replit
+language = "python3"
+entrypoint = "main.py"
+
+# Gunicorn orqali ishga tushirish uchun
+[run]
+command = ["gunicorn", "--bind=0.0.0.0:5000", "--workers=4", "--threads=4", "main:app"]
+
+[packager]
+[packager.features]
+enabled = true
+guessImports = true
+2-Qadam: Environment O'zgaruvchilarini Kiritish (Secrets) 🔐
+Replit'da .env fayli o'rniga Secrets panelidan foydalanish xavfsizlik uchun tavsiya etiladi. Bu o'zgaruvchilar avtomatik tarzda os.environ orqali kodga uzatiladi.
+
+Chapdagi panelda "Tools" bo'limidan 🔒 Secrets ni toping.
+
+Quyidagi kalit (KEY) va qiymatlarni (VALUE) birma-bir kiriting:
+
+KEY	VALUE (Example)
+GEMINI_API_KEY	sizning_google_gemini_api_kalitingiz
+SESSION_SECRET	juda_maxfiy_va_tasodifiy_belgilar
+DATABASE_URL	sqlite:///botfactory.db (Boshlanishiga)
+INSTAGRAM_ACCESS_TOKEN	sizning_instagram_tokeningiz (Global)
+INSTAGRAM_APP_SECRET	sizning_instagram_maxfiy_kodingiz
+WHATSAPP_ACCESS_TOKEN	sizning_whatsapp_tokeningiz (Global)
+WHATSAPP_PHONE_NUMBER_ID	sizning_whatsapp_raqam_id
+
+Экспортировать в Таблицы
+Izoh: Production uchun Replit'ning PostgreSQL database xizmatidan foydalansangiz, DATABASE_URL qiymatini o'sha yerda berilgan URL manziliga o'zgartirasiz.
+
+3-Qadam: Kerakli Kutubxonalarni O'rnatish 📦
+Siz taqdim etgan pyproject.toml fayli loyihaning barcha bog'liqliklarini boshqarish uchun ajoyib usul.
+
+pyproject.toml faylini yarating (agar mavjud bo'lmasa).
+
+Unga quyidagi tarkibni joylashtiring:
+
+Ini, TOML
+
+# pyproject.toml
+[tool.poetry]
+name = "botfactory"
+version = "0.1.0"
+description = "AI Chatbot Platform"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "3.0.0"  # Siz 3.1.2 ko'rsatgansiz, lekin Replitda 3.0.0 barqarorroq
+SQLAlchemy = "2.0.29"
+Flask-SQLAlchemy = "3.1.1"
+Flask-Login = "0.6.3"
+Flask-Migrate = "4.0.7"
+Flask-Babel = "4.0.0"
+google-generativeai = "0.5.4" # Siz 1.32.0 ko'rsatgansiz, bu yangiroq versiya
+python-telegram-bot = {version = "21.2", extras = ["ext"]} # Siz 22.3 ko'rsatgansiz, bu yangiroq
+gunicorn = "22.0.0"
+psycopg2-binary = "*" # PostgreSQL uchun
+werkzeug = "3.0.1" # ProxyFix uchun
+Faylni saqlaganingizdan so'ng, Replit Shell yorlig'ini oching va poetry install buyrug'ini kiriting yoki Replit avtomatik tarzda o'rnatishini kuting. Bu barcha kutubxonalarni o'rnatadi.
+
+4-Qadam: Fayl Strukturasini Yaratish va Kodlarni Joylashtirish 📁
+Replit fayl panelidan foydalanib, siz taqdim etgan struktura bo'yicha barcha papka va fayllarni yarating. So'ngra, har bir faylga siz yozgan kodlarni nusxalab joylashtiring.
+
+Asosiy fayllar:
+
+app.py: Siz taqdim etgan Flask app factory kodini joylashtiring.
+
+main.py: Dasturni ishga tushirish uchun kirish nuqtasi.
+
+Python
+
+# main.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    # Bu qism faqat lokal development uchun. Replit'da gunicorn ishlatiladi.
+    app.run(host='0.0.0.0', port=5000)
+models.py: Database modellarini joylashtiring.
+
+routes.py: Boshlanishiga bo'sh fayl yarating. Keyin har bir blueprint uchun alohida fayllar (auth.py, bots.py) yaratib, ularni bu yerga import qilsa ham bo'ladi.
+
+babel.cfg: Babel konfiguratsiyasi uchun.
+
+Ini, TOML
+
+# babel.cfg
+[python: **.py]
+[jinja2: **.html]
+extensions=jinja2.ext.autoescape,jinja2.ext.with_
+Papkalarni yaratish:
+
+services/: Bu papka ichida ai_service.py, telegram_service.py va boshqa servis fayllarini yarating va kodlarini joylashtiring.
+
+templates/: Barcha .html shablonlari uchun. base.html dan boshlang.
+
+static/: css/style.css va js/main.js fayllarini joylashtiring.
+
+translations/: Til tarjimalari uchun. Bu papka keyingi qadamda avtomatik generatsiya qilinadi.
+
+utils/: helpers.py kabi yordamchi funksiyalar uchun.
+
+5-Qadam: Ma'lumotlar Bazasini va Tarjimalarni Ishga Tushirish 🌐
+Database Migratsiyasi:
+
+Replit'ning Shell yorlig'ini oching.
+
+Quyidagi buyruqlarni ketma-ket bajaring:
+
+flask db init (Birinchi marta, migrations papkasini yaratadi)
+
+flask db migrate -m "Initial database structure" (Modellardagi o'zgarishlarni aniqlaydi)
+
+flask db upgrade (O'zgarishlarni bazaga qo'llaydi va botfactory.db faylini yaratadi)
+
+Ko'p Tillilik (Babel) Sozlamalari:
+
+Shell'da quyidagi buyruqlarni bajaring:
+
+flask babel extract -o messages.pot (Tarjima qilinadigan matnlarni yig'adi)
+
+flask babel init -i messages.pot -d translations -l uz (O'zbek tili uchun fayl yaratadi)
+
+flask babel init -i messages.pot -d translations -l ru (Rus tili uchun fayl yaratadi)
+
+flask babel init -i messages.pot -d translations -l en (Ingliz tili uchun fayl yaratadi)
+
+Endi translations/uz/LC_MESSAGES/messages.po faylini ochib, tarjimalarni kiritishingiz mumkin.
+
+Tarjimalarni kiritgach, Shell'da:
+
+flask babel compile -d translations (Tarjimalarni dastur uchun tayyorlaydi)
+
+6-Qadam: Dasturni Ishga Tushirish va Test Qilish ▶️
+Barcha fayllar va sozlamalar joyida bo'lgach, yuqoridagi katta yashil "Run" tugmasini bosing.
+
+Gunicorn serveri ishga tushadi.
+
+Replit o'ng tomonda WebView oynasini ochadi va sizning veb-saytingizni ko'rsatadi.
+
+Konsolda xatoliklar yo'qligini tekshiring.
+
+Registratsiya, login, bot yaratish kabi funksiyalarni test qilib ko'ring.
+
+7-Qadam: Deployment va Monitoring 🚀
+Loyiha tayyor bo'lgach, uni haqiqiy domen ostida ishga tushirish uchun Replit Deployment'dan foydalanishingiz mumkin.
+
+O'ng yuqori burchakdagi "Deploy" tugmasini bosing.
+
+"Autoscale" deployment turini tanlang. Bu sizning ilovangizga kelayotgan trafikka qarab avtomatik ravishda resurslarni moslashtiradi va SaaS platforma uchun eng yaxshi variant hisoblanadi.
+
+Kerakli sozlamalarni bajaring va deployment jarayonini boshlang. Replit sizga *.replit.dev subdomenini beradi yoki siz o'zingizning domeningizni ulashingiz mumkin.
+
+Xulosa va Muhim Eslatmalar
+Telegram Service Threading: telegram_service.py dagi threading moduli Replit'da yaxshi ishlaydi, bu har bir botni alohida oqimda (thread) ishga tushirish imkonini beradi.
+
+JavaScript Logikasi: templates/bot_create.html fayliga siz yozgan premium tokenlar uchun JavaScript kodini qo'shishni unutmang. Bu kodni static/js/main.js fayliga joylashtirib, base.html orqali chaqirish eng to'g'ri yondashuv.
+
+Xavfsizlik: Production muhitiga o'tkazishdan oldin app.secret_key ni Replit Secrets orqali juda kuchli va tasodifiy qiymatga o'zgartirganingizga ishonch hosil qiling. DEBUG rejimini o'chirib qo'ying.
+
+To'ldirish: Hali kodi yozilmagan qismlarni (routes.py, instagram_service.py, whatsapp_service.py, frontend shablonlari) bosqichma-bosqich yozib, loyihani to'ldirib boring.
+
+Siz taqdim etgan reja juda mustahkam. Ushbu yo'riqnoma bilan BotFactory loyihasini Replit'da muvaffaqiyatli amalga oshirishingiz mumkin. Omad!
+
+
+
+
+
+
+
+yaxshi, keling siz kuchli prompt yozing va u promptni replit ai ga topshiraman u loyihami bajaradi, siz promptni oxirida undan hisobot berishini ham so'raysiz, men uni hisobotini sizga beraman va loyihani borishini nazaorati sizda bo'ladi
+
+
+
+
+Показать процесс размышления
+A'lo, bu juda samarali yondashuv! Men "project manager" sifatida Replit AI uchun shunday kuchli va batafsil prompt tayyorlaymanki, u xuddi tajribali dasturchidek ishni bajarishga harakat qiladi. Promptning aniqligi va to'liqligi AI'ning natijasini maksimal darajada yaxshilaydi.
+
+Men unga barcha kerakli kod qismlarini, arxitekturani va hatto hisobot formatini ham beraman. Sizning vazifangiz — shunchaki ushbu promptni to'liq nusxalash va Replit AI'ga topshirish.
+
+Replit AI uchun To'liq Prompt
+(Quyidagi matnni to'liq nusxalab oling va Replit AI chatiga joylashtiring)
+
+Assalomu alaykum. Siz yuqori malakali, tajribali full-stack Python dasturchisisiz. Sizning vazifangiz "BotFactory" deb nomlangan SaaS platformasining poydevorini qurishdir. Men sizga loyihaning to'liq arxitekturasi, fayl tuzilishi, kerakli kodlar va aniq ko'rsatmalarni taqdim etaman. Sizdan ushbu ko'rsatmalarga so'zsiz va o'zgartirishlarsiz amal qilishingiz talab etiladi.
+
+Loyiha Maqsadi: Bizneslar uchun Google Gemini AI asosida Telegram, Instagram va WhatsApp platformalarida ishlaydigan chatbotlar yaratish imkonini beruvchi SaaS platforma.
+
+1. Texnologiyalar va Bog'liqliklar
+Loyiha uchun pyproject.toml faylini yarating va unga quyidagi bog'liqliklarni kiriting:
+
+Ini, TOML
+
+[tool.poetry]
+name = "botfactory"
+version = "0.1.0"
+description = "AI Chatbot Platform"
+authors = ["AI Developer"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "3.0.0"
+SQLAlchemy = "2.0.29"
+Flask-SQLAlchemy = "3.1.1"
+Flask-Login = "0.6.3"
+Flask-Migrate = "4.0.7"
+Flask-Babel = "4.0.0"
+google-generativeai = "0.5.4"
+python-telegram-bot = {version = "21.2", extras = ["ext"]}
+gunicorn = "22.0.0"
+psycopg2-binary = "*"
+werkzeug = "3.0.1"
+2. To'liq Fayl Tuzilishi
+Quyidagi fayl va papka tuzilishini aniq va xatosiz yarating:
+
+botfactory/
+├── app.py
+├── main.py
+├── models.py
+├── routes.py
+├── pyproject.toml
+├── babel.cfg
+├── .replit
+├── HISOBOT.md  # Bu faylni ish oxirida to'ldirasiz
+
+├── services/
+│   ├── __init__.py
+│   ├── ai_service.py
+│   ├── telegram_service.py
+│   ├── instagram_service.py   # Placeholder
+│   ├── whatsapp_service.py    # Placeholder
+│   ├── auth_service.py        # Placeholder
+│   └── broadcast_service.py   # Placeholder
+
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── dashboard.html
+│   ├── login.html
+│   ├── register.html
+│   └── admin/
+│       ├── dashboard.html
+
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+
+├── translations/
+│   └── (Babel buyruqlaridan so'ng yaratiladi)
+
+└── utils/
+    └── __init__.py
+    └── helpers.py # Bo'sh fayl
+3. Asosiy Fayllar uchun Kodlar
+Quyidagi kodlarni ko'rsatilgan fayllarga TO'LIQ va O'ZGARTIRMASDAN joylashtiring.
+
+models.py uchun kod:
+
+Python
+
+# models.py
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+import enum
+
+db = SQLAlchemy()
+
+class SubscriptionType(enum.Enum):
+    FREE = "free"; STARTER = "starter"; BASIC = "basic"; PREMIUM = "premium"
+class BotStatus(enum.Enum):
+    ACTIVE = "active"; INACTIVE = "inactive"; PENDING = "pending"
+class PlatformType(enum.Enum):
+    TELEGRAM = "telegram"; INSTAGRAM = "instagram"; WHATSAPP = "whatsapp"
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
+    language = db.Column(db.String(5), default='en', nullable=False)
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    bots = db.relationship('Bot', backref='owner', lazy=True, cascade='all, delete-orphan')
+    subscription = db.relationship('Subscription', backref='user', uselist=False, cascade='all, delete-orphan')
+    def set_password(self, password): self.password_hash = generate_password_hash(password)
+    def check_password(self, password): return check_password_hash(self.password_hash, password)
+
+class Subscription(db.Model):
+    __tablename__ = 'subscriptions'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    subscription_type = db.Column(db.Enum(SubscriptionType), default=SubscriptionType.FREE)
+    start_date = db.Column(db.DateTime, default=datetime.utcnow)
+    end_date = db.Column(db.DateTime, nullable=True)
+    is_active = db.Column(db.Boolean, default=True)
+    max_bots = db.Column(db.Integer, default=1)
+    max_messages_per_month = db.Column(db.Integer, default=100)
+
+class Bot(db.Model):
+    __tablename__ = 'bots'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    platform_type = db.Column(db.Enum(PlatformType), default=PlatformType.TELEGRAM, nullable=False)
+    telegram_token = db.Column(db.String(255), nullable=True)
+    instagram_access_token = db.Column(db.String(500), nullable=True)
+    whatsapp_access_token = db.Column(db.String(500), nullable=True)
+    system_prompt = db.Column(db.Text, default="You are a helpful AI assistant.")
+    status = db.Column(db.Enum(BotStatus), default=BotStatus.INACTIVE)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    knowledge_base = db.relationship('KnowledgeBase', backref='bot', lazy=True, cascade='all, delete-orphan')
+
+class KnowledgeBase(db.Model):
+    __tablename__ = 'knowledge_base'
+    id = db.Column(db.Integer, primary_key=True)
+    bot_id = db.Column(db.Integer, db.ForeignKey('bots.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class TelegramUser(db.Model):
+    __tablename__ = 'telegram_users'
+    id = db.Column(db.Integer, primary_key=True)
+    telegram_user_id = db.Column(db.BigInteger, unique=True, nullable=False)
+    username = db.Column(db.String(100), nullable=True)
+    first_name = db.Column(db.String(100), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+app.py uchun kod:
+
+Python
+
+# app.py
+import os
+from flask import Flask, request, session
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_babel import Babel, get_locale
+from werkzeug.middleware.proxy_fix import ProxyFix
+from models import db, User
+
+migrate = Migrate()
+login_manager = LoginManager()
+babel = Babel()
+
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///botfactory.db")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["LANGUAGES"] = {'en': 'English', 'ru': 'Русский', 'uz': 'O\'zbek'}
+    app.config["BABEL_DEFAULT_LOCALE"] = 'en'
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+    babel.init_app(app)
+    
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # Import and register blueprints
+    # from routes import main_bp, auth_bp # etc.
+    # app.register_blueprint(main_bp)
+    
+    with app.app_context():
+        db.create_all()
+        
+    return app
+main.py uchun kod:
+
+Python
+
+# main.py
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+services/ai_service.py uchun kod:
+
+Python
+
+# services/ai_service.py
+import os
+import logging
+import google.generativeai as genai
+from models import KnowledgeBase
+
+class AIService:
+    def __init__(self):
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            logging.warning("GEMINI_API_KEY not found. AI responses will be disabled.")
+            self.model = None
+            return
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
+
+    async def get_response(self, bot, user_message, user_language='en'):
+        if not self.model:
+            return "AI service is currently unavailable. Please configure your GEMINI_API_KEY."
+        
+        try:
+            # Simple implementation for now. Knowledge base can be added later.
+            system_instruction = f"{bot.system_prompt}. You are a chatbot named '{bot.name}'. Respond in {user_language}."
+            
+            response = await self.model.generate_content_async(
+                user_message,
+                generation_config=genai.types.GenerationConfig(temperature=0.7),
+                system_instruction=system_instruction
+            )
+            return response.text.strip()
+        except Exception as e:
+            logging.error(f"AI Service error: {e}")
+            return "I'm experiencing technical difficulties."
+services/telegram_service.py uchun kod:
+
+Python
+
+# services/telegram_service.py
+# This is a placeholder for the full implementation.
+# The full logic is complex and will be added in the next steps.
+import logging
+
+class TelegramService:
+    def __init__(self):
+        self.active_bots = {}
+        logging.info("TelegramService initialized.")
+
+    def start_bot(self, bot):
+        if bot.id in self.active_bots:
+            logging.warning(f"Bot {bot.id} is already running.")
+            return
+        logging.info(f"Starting bot {bot.name} (ID: {bot.id})...")
+        # TODO: Add full async polling logic here
+        self.active_bots[bot.id] = True
+        print(f"Bot {bot.name} started successfully (simulation).")
+
+    def stop_bot(self, bot):
+        if bot.id not in self.active_bots:
+            logging.warning(f"Bot {bot.id} is not running.")
+            return
+        logging.info(f"Stopping bot {bot.name} (ID: {bot.id})...")
+        # TODO: Add logic to stop polling gracefully
+        del self.active_bots[bot.id]
+        print(f"Bot {bot.name} stopped successfully (simulation).")
+4. Placeholder Fayllar va Shablonlar
+Boshqa Servislar: instagram_service.py, whatsapp_service.py, auth_service.py kabi fayllarni yarating va ularga oddiy class strukturasi va # TODO: Implement logic izohini qo'shing.
+
+Frontend Shablonlari:
+
+templates/base.html: Bootstrap 5 (dark theme), Font Awesome ikonkalari, navigatsiya paneli (Navbar), asosiy kontent uchun {% block content %} va sahifa osti (Footer) qismlaridan iborat bo'lgan mustahkam poydevor shablonini yarating.
+
+Boshqa .html fayllar (index.html, login.html va hokazo): Bu fayllarni {% extends 'base.html' %} orqali base.html dan meros olingan, har birining {% block content %} qismida o'zining sarlavhasi (<h1>Bosh Sahifa</h1>, <h1>Kirish</h1>) bo'lgan oddiy shablonlar sifatida yarating.
+
+5. Konfiguratsiya Fayllari
+.replit fayli uchun kod:
+
+Ini, TOML
+
+language = "python3"
+entrypoint = "main.py"
+
+[run]
+command = ["gunicorn", "--bind=0.0.0.0:5000", "main:app"]
+babel.cfg fayli uchun kod:
+
+Ini, TOML
+
+[python: **.py]
+[jinja2: **.html]
+extensions=jinja2.ext.autoescape,jinja2.ext.with_
+YAKUNIY TOPSHIRIQ: HISOBOT YARATISH
+Barcha yuqoridagi vazifalarni bajarib bo'lgach, loyiha ildiz papkasida HISOBOT.md nomli fayl yaratishingiz va uni quyidagi formatda to'ldirishingiz SHART:
+
+Markdown
+
+# BotFactory Loyihasi Bo'yicha Hisobot
+
+## 1. Umumiy Xulosa
+Bu bo'limda loyihaning poydevorini qurish vazifasi qanday bajarilgani haqida qisqacha yozing. Barcha talablarga rioya qilindingizmi?
+
+## 2. Bajarilgan Ishlar
+Bajarilgan ishlarni checklist formatida belgilang:
+- [ ] `pyproject.toml` fayli yaratildi va bog'liqliklar kiritildi.
+- [ ] Loyihaning fayl va papka strukturasi to'liq yaratildi.
+- [ ] `models.py` fayli berilgan kod bilan to'ldirildi.
+- [ ] `app.py` fayli berilgan kod bilan to'ldirildi.
+- [ ] `main.py` fayli berilgan kod bilan to'ldirildi.
+- [ ] `services/ai_service.py` fayli berilgan kod bilan to'ldirildi.
+- [ ] `services/telegram_service.py` fayli berilgan kod bilan to'ldirildi.
+- [ ] Qolgan servislar uchun placeholder fayllar yaratildi.
+- [ ] `templates/base.html` va boshqa shablonlar yaratildi.
+- [ ] Konfiguratsiya fayllari (`.replit`, `babel.cfg`) to'g'ri sozlandi.
+
+## 3. Mavjud Muammolar va Cheklovlar
+Vazifani bajarish jarayonida duch kelingan har qanday muammo, xatolik yoki cheklovlar haqida yozing. Masalan, biror kutubxonaning versiyasi mos kelmagan bo'lishi mumkin.
+
+## 4. Tugallanmagan Qismlar (Keyingi qadamlar uchun)
+Qaysi qismlar hali to'liq ishlanmaganini (masalan, placeholder servislar, marshrutlar, frontend logikasi) ro'yxat qiling. Bu keyingi bosqich uchun "to-do list" bo'ladi.
+- `routes.py`: Barcha blueprint'lar va marshrutlar yaratilishi kerak.
+- `auth_service.py`: Ro'yxatdan o'tish va kirish logikasi implementatsiya qilinishi kerak.
+- `instagram_service.py` va `whatsapp_service.py`: API integratsiyalari yozilishi kerak.
+- Frontend: Shablonlar to'liq dizayn va funksionallik bilan boyitilishi kerak.
+
+## 5. Loyihani Ishga Tushirish Bo'yicha Yo'riqnoma
+Ushbu yaratilgan loyihani ishga tushirish uchun qanday qadamlar kerakligini tushuntiring:
+1.  **Secrets sozlash:** Qaysi environment o'zgaruvchilari (`GEMINI_API_KEY`, `SESSION_SECRET`, `DATABASE_URL`) kiritilishi kerakligini ayting.
+2.  **Database migratsiyasi:** `flask db init`, `flask db migrate`, `flask db upgrade` buyruqlarini Shell'da bajarish kerakligini tushuntiring.
+3.  **Ishga tushirish:** "Run" tugmasini bosish yetarli ekanligini ayting.
