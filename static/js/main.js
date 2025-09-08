@@ -1,5 +1,5 @@
 /**
- * BotFactory - Main JavaScript Functions
+ * ChatBot Factory - Main JavaScript Functions
  * Handles interactive features, form validation, and UI enhancements
  */
 
@@ -431,7 +431,7 @@ const api = {
 };
 
 // Export functions for global use
-window.BotFactory = {
+window.ChatBotFactory = {
     showToast,
     hideToast,
     copyToClipboard,
@@ -448,5 +448,5 @@ window.BotFactory = {
 };
 
 // Console welcome message
-console.log('%cBotFactory Platform', 'color: #0d6efd; font-size: 24px; font-weight: bold;');
-console.log('%cWelcome to the BotFactory admin console!', 'color: #6c757d; font-size: 14px;');
+console.log('%cChatBot Factory Platform', 'color: #0d6efd; font-size: 24px; font-weight: bold;');
+console.log('%cWelcome to the ChatBot Factory admin console!', 'color: #6c757d; font-size: 14px;');

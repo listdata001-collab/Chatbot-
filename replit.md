@@ -1,6 +1,6 @@
 # Overview
 
-BotFactory is a multi-platform AI chatbot creation and management platform that enables users to build intelligent chatbots for Telegram, Instagram, and WhatsApp using Google Gemini AI. The platform provides a web-based interface for creating, configuring, and managing chatbots without requiring coding knowledge.
+ChatBot Factory is a multi-platform AI chatbot creation and management platform that enables users to build intelligent chatbots for Telegram, Instagram, and WhatsApp using Google Gemini AI. The platform provides a web-based interface for creating, configuring, and managing chatbots without requiring coding knowledge.
 
 The application follows a modular architecture with separate services for different messaging platforms, AI integration, and user management. It supports multiple languages (English, Uzbek, Russian) and includes subscription-based access control with different tiers of service.
 

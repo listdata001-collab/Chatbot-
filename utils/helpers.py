@@ -1,5 +1,5 @@
 """
-Helper functions for the BotFactory platform
+Helper functions for the ChatBot Factory platform
 """
 
 import os

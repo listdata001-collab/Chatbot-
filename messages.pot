@@ -1,0 +1,772 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-09-04 12:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: routes.py:71
+msgid "Login successful!"
+msgstr ""
+
+#: routes.py:74
+msgid "Invalid username or password"
+msgstr ""
+
+#: routes.py:91
+msgid "Username already exists"
+msgstr ""
+
+#: routes.py:95
+msgid "Email already registered"
+msgstr ""
+
+#: routes.py:115
+msgid "Registration successful! Please log in."
+msgstr ""
+
+#: routes.py:125
+msgid "You have been logged out"
+msgstr ""
+
+#: routes.py:137
+msgid "You have reached your bot limit. Please upgrade your subscription."
+msgstr ""
+
+#: routes.py:169
+msgid "Bot created and started successfully!"
+msgstr ""
+
+#: routes.py:172
+msgid "Bot created but failed to start. Please check your token."
+msgstr ""
+
+#: routes.py:176
+msgid "Bot created but failed to start. Please check your configuration."
+msgstr ""
+
+#: routes.py:178
+msgid "Bot created successfully!"
+msgstr ""
+
+#: routes.py:218
+msgid "Bot stopped successfully"
+msgstr ""
+
+#: routes.py:223
+msgid "Bot started successfully"
+msgstr ""
+
+#: routes.py:225
+msgid "Failed to start bot. Please check your configuration."
+msgstr ""
+
+#: routes.py:244
+msgid "Bot deleted successfully"
+msgstr ""
+
+#: routes.py:253
+msgid "Access denied"
+msgstr ""
+
+#: templates/base.html:34 templates/base.html:122 templates/dashboard.html:3
+#: templates/dashboard.html:10
+msgid "Dashboard"
+msgstr ""
+
+#: templates/base.html:39 templates/bot_create.html:3
+#: templates/bot_create.html:143
+msgid "Create Bot"
+msgstr ""
+
+#: templates/admin/dashboard.html:130 templates/base.html:45
+msgid "Admin"
+msgstr ""
+
+#: templates/base.html:72
+msgid "Profile"
+msgstr ""
+
+#: templates/base.html:74
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:79 templates/login.html:3
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:82 templates/register.html:3
+msgid "Register"
+msgstr ""
+
+#: templates/base.html:115
+msgid "AI-powered chatbot platform for businesses"
+msgstr ""
+
+#: templates/base.html:118
+msgid "Quick Links"
+msgstr ""
+
+#: templates/base.html:120
+msgid "Home"
+msgstr ""
+
+#: templates/base.html:129
+msgid "All rights reserved."
+msgstr ""
+
+#: templates/bot_create.html:12 templates/dashboard.html:12
+msgid "Create New Bot"
+msgstr ""
+
+#: templates/bot_create.html:19
+msgid "Basic Information"
+msgstr ""
+
+#: templates/bot_create.html:22 templates/bot_manage.html:259
+msgid "Bot Name"
+msgstr ""
+
+#: templates/bot_create.html:24
+msgid "Enter a name for your bot"
+msgstr ""
+
+#: templates/bot_create.html:25
+msgid "Choose a memorable name for your bot"
+msgstr ""
+
+#: templates/bot_create.html:29 templates/bot_manage.html:263
+msgid "Description"
+msgstr ""
+
+#: templates/bot_create.html:31
+msgid "Describe what your bot does"
+msgstr ""
+
+#: templates/bot_create.html:32
+msgid "Optional: Describe your bot's purpose and functionality"
+msgstr ""
+
+#: templates/bot_create.html:38 templates/bot_manage.html:159
+#: templates/dashboard.html:158
+msgid "Platform"
+msgstr ""
+
+#: templates/bot_create.html:48 templates/index.html:104
+msgid "Available"
+msgstr ""
+
+#: templates/bot_create.html:61 templates/bot_create.html:74
+#: templates/index.html:112 templates/index.html:120
+msgid "Coming Soon"
+msgstr ""
+
+#: templates/bot_create.html:84
+msgid "Platform Configuration"
+msgstr ""
+
+#: templates/bot_create.html:90
+msgid ""
+"To create a Telegram bot, you need to get a bot token from @BotFather on "
+"Telegram."
+msgstr ""
+
+#: templates/bot_create.html:92
+msgid "Learn how"
+msgstr ""
+
+#: templates/bot_create.html:97 templates/bot_manage.html:170
+msgid "Bot Token"
+msgstr ""
+
+#: templates/bot_create.html:100
+msgid "Enter your Telegram bot token from @BotFather"
+msgstr ""
+
+#: templates/bot_create.html:107 templates/bot_manage.html:181
+#: templates/bot_manage.html:267
+msgid "AI Personality"
+msgstr ""
+
+#: templates/bot_create.html:110
+msgid "Bot Personality"
+msgstr ""
+
+#: templates/bot_create.html:112
+msgid "Describe how your bot should behave and respond"
+msgstr ""
+
+#: templates/bot_create.html:112
+msgid ""
+"You are a helpful assistant. Be friendly, professional, and informative "
+"in your responses."
+msgstr ""
+
+#: templates/bot_create.html:113
+msgid ""
+"Define your bot's personality and behavior. This will guide how the AI "
+"responds to users."
+msgstr ""
+
+#: templates/bot_create.html:118
+msgid "Personality Presets"
+msgstr ""
+
+#: templates/bot_create.html:121
+msgid ""
+"You are a helpful customer support assistant. Be professional, "
+"empathetic, and solution-oriented."
+msgstr ""
+
+#: templates/bot_create.html:122
+msgid "Customer Support"
+msgstr ""
+
+#: templates/bot_create.html:125
+msgid ""
+"You are a friendly sales assistant. Be enthusiastic, knowledgeable about "
+"products, and help customers make purchasing decisions."
+msgstr ""
+
+#: templates/bot_create.html:126
+msgid "Sales Assistant"
+msgstr ""
+
+#: templates/bot_create.html:129
+msgid ""
+"You are an educational tutor. Be patient, encouraging, and explain "
+"concepts clearly with examples."
+msgstr ""
+
+#: templates/bot_create.html:130
+msgid "Educational Tutor"
+msgstr ""
+
+#: templates/bot_create.html:140 templates/bot_manage.html:273
+msgid "Cancel"
+msgstr ""
+
+#: templates/bot_create.html:214
+msgid "Please select a platform for your bot"
+msgstr ""
+
+#: templates/bot_create.html:222
+msgid "Please provide a valid Telegram bot token"
+msgstr ""
+
+#: templates/bot_manage.html:3
+msgid "Manage Bot"
+msgstr ""
+
+#: templates/bot_manage.html:15
+msgid "No description provided"
+msgstr ""
+
+#: templates/bot_manage.html:23 templates/dashboard.html:184
+msgid "Active"
+msgstr ""
+
+#: templates/bot_manage.html:27 templates/dashboard.html:186
+msgid "Inactive"
+msgstr ""
+
+#: templates/bot_manage.html:31 templates/dashboard.html:188
+msgid "Pending"
+msgstr ""
+
+#: templates/bot_manage.html:40
+msgid "Stop"
+msgstr ""
+
+#: templates/bot_manage.html:40
+msgid "Start"
+msgstr ""
+
+#: templates/bot_manage.html:43
+msgid "Edit"
+msgstr ""
+
+#: templates/bot_manage.html:47 templates/dashboard.html:212
+msgid "Are you sure you want to delete this bot?"
+msgstr ""
+
+#: templates/bot_manage.html:48
+msgid "Delete"
+msgstr ""
+
+#: templates/admin/dashboard.html:78 templates/bot_manage.html:69
+msgid "Total Conversations"
+msgstr ""
+
+#: templates/bot_manage.html:87
+msgid "Total Messages"
+msgstr ""
+
+#: templates/bot_manage.html:105
+msgid "Avg Response Time"
+msgstr ""
+
+#: templates/bot_manage.html:129 templates/dashboard.html:160
+msgid "Created"
+msgstr ""
+
+#: templates/bot_manage.html:143
+msgid "Message Analytics (Last 7 Days)"
+msgstr ""
+
+#: templates/bot_manage.html:155
+msgid "Configuration"
+msgstr ""
+
+#: templates/bot_manage.html:194
+msgid "Recent Conversations"
+msgstr ""
+
+#: templates/bot_manage.html:202
+msgid "User ID"
+msgstr ""
+
+#: templates/bot_manage.html:203 templates/bot_manage.html:303
+msgid "Messages"
+msgstr ""
+
+#: templates/bot_manage.html:204
+msgid "Started"
+msgstr ""
+
+#: templates/bot_manage.html:205
+msgid "Last Message"
+msgstr ""
+
+#: templates/bot_manage.html:206 templates/dashboard.html:162
+msgid "Actions"
+msgstr ""
+
+#: templates/bot_manage.html:227
+msgid "View"
+msgstr ""
+
+#: templates/bot_manage.html:238
+msgid "No conversations yet"
+msgstr ""
+
+#: templates/bot_manage.html:239
+msgid "Conversations will appear here when users start chatting with your bot"
+msgstr ""
+
+#: templates/bot_manage.html:253
+msgid "Edit Bot"
+msgstr ""
+
+#: templates/bot_manage.html:274
+msgid "Save Changes"
+msgstr ""
+
+#: templates/bot_manage.html:309
+msgid "Unique Users"
+msgstr ""
+
+#: templates/bot_manage.html:344
+msgid "Conversation view feature coming soon!"
+msgstr ""
+
+#: templates/bot_manage.html:349
+msgid "Edit functionality coming soon!"
+msgstr ""
+
+#: templates/admin/dashboard.html:46 templates/dashboard.html:30
+msgid "Total Bots"
+msgstr ""
+
+#: templates/admin/dashboard.html:62 templates/dashboard.html:48
+msgid "Active Bots"
+msgstr ""
+
+#: templates/dashboard.html:66
+msgid "Messages Today"
+msgstr ""
+
+#: templates/dashboard.html:92
+msgid "Subscription"
+msgstr ""
+
+#: templates/dashboard.html:97 templates/index.html:139
+msgid "Free"
+msgstr ""
+
+#: templates/dashboard.html:112
+msgid "Subscription Limits"
+msgstr ""
+
+#: templates/dashboard.html:116
+msgid "Bots Used"
+msgstr ""
+
+#: templates/dashboard.html:122 templates/dashboard.html:134
+msgid "Unlimited"
+msgstr ""
+
+#: templates/dashboard.html:128
+msgid "Monthly Messages"
+msgstr ""
+
+#: templates/dashboard.html:149
+msgid "Your Bots"
+msgstr ""
+
+#: templates/dashboard.html:157
+msgid "Name"
+msgstr ""
+
+#: templates/dashboard.html:159
+msgid "Status"
+msgstr ""
+
+#: templates/dashboard.html:161
+msgid "Last Active"
+msgstr ""
+
+#: templates/dashboard.html:199
+msgid "Never"
+msgstr ""
+
+#: templates/dashboard.html:225
+msgid "No bots created yet"
+msgstr ""
+
+#: templates/dashboard.html:226
+msgid "Create your first AI chatbot to get started"
+msgstr ""
+
+#: templates/dashboard.html:228
+msgid "Create Your First Bot"
+msgstr ""
+
+#: templates/index.html:3
+msgid "BotFactory - AI Chatbot Platform"
+msgstr ""
+
+#: templates/index.html:11
+msgid "Create AI Chatbots in Minutes"
+msgstr ""
+
+#: templates/index.html:14
+msgid ""
+"Build intelligent chatbots for Telegram, Instagram, and WhatsApp using "
+"Google Gemini AI. No coding required."
+msgstr ""
+
+#: templates/index.html:18
+msgid "Get Started Free"
+msgstr ""
+
+#: templates/index.html:21 templates/login.html:47
+msgid "Sign In"
+msgstr ""
+
+#: templates/index.html:38
+msgid "Why Choose BotFactory?"
+msgstr ""
+
+#: templates/index.html:39
+msgid "Everything you need to create and manage AI chatbots"
+msgstr ""
+
+#: templates/index.html:50
+msgid "AI-Powered"
+msgstr ""
+
+#: templates/index.html:52
+msgid "Powered by Google Gemini AI for intelligent and natural conversations"
+msgstr ""
+
+#: templates/index.html:64
+msgid "Multi-Platform"
+msgstr ""
+
+#: templates/index.html:66
+msgid "Deploy on Telegram, Instagram, and WhatsApp from a single dashboard"
+msgstr ""
+
+#: templates/admin/dashboard.html:193 templates/index.html:78
+msgid "Analytics"
+msgstr ""
+
+#: templates/index.html:80
+msgid "Real-time analytics and insights to optimize your bot performance"
+msgstr ""
+
+#: templates/index.html:93
+msgid "Supported Platforms"
+msgstr ""
+
+#: templates/index.html:94
+msgid "Deploy your bots across popular messaging platforms"
+msgstr ""
+
+#: templates/index.html:130
+msgid "Simple Pricing"
+msgstr ""
+
+#: templates/index.html:131
+msgid "Choose the plan that fits your needs"
+msgstr ""
+
+#: templates/index.html:142 templates/index.html:161 templates/index.html:177
+#: templates/index.html:193
+msgid "month"
+msgstr ""
+
+#: templates/index.html:144
+msgid "Bot"
+msgstr ""
+
+#: templates/index.html:145 templates/index.html:164 templates/index.html:180
+msgid "Messages/month"
+msgstr ""
+
+#: templates/index.html:146
+msgid "Basic Analytics"
+msgstr ""
+
+#: templates/index.html:155
+msgid "Popular"
+msgstr ""
+
+#: templates/index.html:158
+msgid "Starter"
+msgstr ""
+
+#: templates/index.html:163 templates/index.html:179
+msgid "Bots"
+msgstr ""
+
+#: templates/index.html:165
+msgid "Advanced Analytics"
+msgstr ""
+
+#: templates/index.html:174
+msgid "Basic"
+msgstr ""
+
+#: templates/index.html:181
+msgid "Premium Support"
+msgstr ""
+
+#: templates/index.html:190
+msgid "Premium"
+msgstr ""
+
+#: templates/index.html:195
+msgid "Unlimited Bots"
+msgstr ""
+
+#: templates/index.html:196
+msgid "Unlimited Messages"
+msgstr ""
+
+#: templates/index.html:197
+msgid "Priority Support"
+msgstr ""
+
+#: templates/index.html:208
+msgid "Ready to Get Started?"
+msgstr ""
+
+#: templates/index.html:209
+msgid "Join thousands of businesses using BotFactory to automate customer support"
+msgstr ""
+
+#: templates/index.html:211
+msgid "Start Your Free Trial"
+msgstr ""
+
+#: templates/login.html:13
+msgid "Welcome Back"
+msgstr ""
+
+#: templates/login.html:14
+msgid "Sign in to your BotFactory account"
+msgstr ""
+
+#: templates/login.html:19 templates/register.html:19
+msgid "Username"
+msgstr ""
+
+#: templates/login.html:29 templates/register.html:47
+msgid "Password"
+msgstr ""
+
+#: templates/login.html:41
+msgid "Remember me"
+msgstr ""
+
+#: templates/login.html:56
+msgid "Don't have an account?"
+msgstr ""
+
+#: templates/login.html:58
+msgid "Sign up here"
+msgstr ""
+
+#: templates/register.html:13 templates/register.html:91
+msgid "Create Account"
+msgstr ""
+
+#: templates/register.html:14
+msgid "Join BotFactory and start building AI chatbots"
+msgstr ""
+
+#: templates/register.html:26
+msgid "Username must contain only letters, numbers, and underscores"
+msgstr ""
+
+#: templates/register.html:29
+msgid "Please provide a valid username"
+msgstr ""
+
+#: templates/register.html:34
+msgid "Email Address"
+msgstr ""
+
+#: templates/register.html:42
+msgid "Please provide a valid email address"
+msgstr ""
+
+#: templates/register.html:59
+msgid "Password must be at least 6 characters long"
+msgstr ""
+
+#: templates/register.html:67
+msgid "Confirm Password"
+msgstr ""
+
+#: templates/register.html:75 templates/register.html:165
+msgid "Passwords do not match"
+msgstr ""
+
+#: templates/register.html:82
+msgid "I agree to the Terms of Service and Privacy Policy"
+msgstr ""
+
+#: templates/register.html:85
+msgid "You must agree to the terms and conditions"
+msgstr ""
+
+#: templates/register.html:100
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/register.html:102
+msgid "Sign in here"
+msgstr ""
+
+#: templates/register.html:144
+msgid "Weak"
+msgstr ""
+
+#: templates/register.html:149
+msgid "Medium"
+msgstr ""
+
+#: templates/register.html:154
+msgid "Strong"
+msgstr ""
+
+#: templates/register.html:159
+msgid "Password strength"
+msgstr ""
+
+#: templates/admin/dashboard.html:3 templates/admin/dashboard.html:11
+msgid "Admin Dashboard"
+msgstr ""
+
+#: templates/admin/dashboard.html:14
+msgid "Administrator"
+msgstr ""
+
+#: templates/admin/dashboard.html:30
+msgid "Total Users"
+msgstr ""
+
+#: templates/admin/dashboard.html:93
+msgid "Subscription Distribution"
+msgstr ""
+
+#: templates/admin/dashboard.html:104
+msgid "users"
+msgstr ""
+
+#: templates/admin/dashboard.html:117
+msgid "Recent Registrations"
+msgstr ""
+
+#: templates/admin/dashboard.html:144
+msgid "No recent registrations"
+msgstr ""
+
+#: templates/admin/dashboard.html:158
+msgid "System Management"
+msgstr ""
+
+#: templates/admin/dashboard.html:167
+msgid "User Management"
+msgstr ""
+
+#: templates/admin/dashboard.html:168
+msgid "Manage user accounts and permissions"
+msgstr ""
+
+#: templates/admin/dashboard.html:169 templates/admin/dashboard.html:182
+#: templates/admin/dashboard.html:195 templates/admin/dashboard.html:208
+msgid "Feature coming soon"
+msgstr ""
+
+#: templates/admin/dashboard.html:170
+msgid "Manage Users"
+msgstr ""
+
+#: templates/admin/dashboard.html:180
+msgid "Bot Overview"
+msgstr ""
+
+#: templates/admin/dashboard.html:181
+msgid "Monitor all bots across the platform"
+msgstr ""
+
+#: templates/admin/dashboard.html:183
+msgid "View All Bots"
+msgstr ""
+
+#: templates/admin/dashboard.html:194
+msgid "Detailed platform analytics and reports"
+msgstr ""
+
+#: templates/admin/dashboard.html:196
+msgid "View Analytics"
+msgstr ""
+
+#: templates/admin/dashboard.html:206
+msgid "System Settings"
+msgstr ""
+
+#: templates/admin/dashboard.html:207
+msgid "Configure platform settings and limits"
+msgstr ""
+
+#: templates/admin/dashboard.html:209
+msgid "Settings"
+msgstr ""
+
